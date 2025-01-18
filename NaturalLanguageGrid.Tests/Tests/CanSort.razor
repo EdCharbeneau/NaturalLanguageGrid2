@@ -1,0 +1,33 @@
+﻿@inherits GridTestContext
+
+@code {
+    public CanSort(ITestOutputHelper output) : base(output) { }
+
+    [Fact]
+    public async Task CanSortColumns()
+    {
+        var cut = Render(@<TelerikGrid Data="TestHelpers.GetFakeCustomers()">
+        <GridColumns>
+            <GridColumn Field="CustomerId" Title="Customer Id" /> <!-- 0 -->
+            <GridColumn Field="CompanyName" Title="Company Name" /> <!-- 1 -->
+            <GridColumn Field="Address" Title="Address" /> <!-- 2 -->
+            <GridColumn Field="City" Title="City" /> <!-- 3 -->
+            <GridColumn Field="Country" Title="Country" /> <!-- 4 -->
+        </GridColumns>
+    </TelerikGrid>
+    );
+        var gridState = cut.FindGridInstance().GetState();
+        var service =  TestHelpers.CreateNaturalLanguageGridService(TestOutput);
+        string query = "Sort by company name in ascending order.";
+
+        // Act
+        var response = await service.ProcessGridRequest(query, gridState);
+
+        // Assert
+        string expectedJsonState = """{"groupDescriptors":[],"collapsedGroups":[],"columnStates":[{"index":0,"width":null,"visible":null,"locked":false,"id":null,"field":"CustomerId"},{"index":1,"width":null,"visible":null,"locked":false,"id":null,"field":"CompanyName"},{"index":2,"width":null,"visible":null,"locked":false,"id":null,"field":"Address"},{"index":3,"width":null,"visible":null,"locked":false,"id":null,"field":"City"},{"index":4,"width":null,"visible":null,"locked":false,"id":null,"field":"Country"}],"expandedItems":[],"filterDescriptors":[],"sortDescriptors":[{"member":"CompanyName","sortDirection":0}],"searchFilter":null,"page":1,"skip":0,"selectedItems":[],"originalEditItem":null,"editItem":null,"editField":null,"insertedItem":null,"tableWidth":null}""";
+        var expectedState = JsonSerializer.Deserialize<GridState<CustomerDto>>(expectedJsonState, JsonSerializerOptions.Web );
+
+        JsonSerializer.Serialize(response, JsonSerializerOptions.Web).Should().BeEquivalentTo(JsonSerializer.Serialize(expectedState, JsonSerializerOptions.Web));
+
+    }
+}

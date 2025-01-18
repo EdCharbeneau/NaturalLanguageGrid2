@@ -1,0 +1,124 @@
+﻿@page "/"
+@using System.Text.Json
+@using TelerikAIExtensions.NaturalLanguage
+@inject CustomerService DataService
+@inject NaturalLanguageGridService AI
+@inject ISpeechRecognitionService SpeechRecognition
+@inject ILogger<Home> Logger
+
+<PageTitle>Telerik Blazor App | Home</PageTitle>
+
+<TelerikLoaderContainer OverlayThemeColor="light"
+Visible="@(isThinking)"
+Text="Thinking...">
+    <Template>
+        <TelerikLoader Type="@LoaderType.Pulsing"
+        Size="@(ThemeConstants.Loader.Size.Large)" />
+    </Template>
+</TelerikLoaderContainer>
+
+<TelerikGrid Data="@Customers" Height="500px" @ref="@Grid"
+Groupable="true"
+Pageable="true"
+Sortable="true"
+FilterMode="@GridFilterMode.FilterRow"
+Reorderable="true"
+Resizable="true"
+SelectionMode="GridSelectionMode.Multiple"
+@bind-SelectedItems="@SelectedItems">
+    <GridColumns>
+        <GridColumn Field="@(nameof(CustomerDto.CustomerId))" Editable="false" />
+        <GridColumn Field="@(nameof(CustomerDto.CompanyName))" Title="Company Name" />
+        <GridColumn Field="@(nameof(CustomerDto.Address))" Title="Address" />
+        <GridColumn Field="@(nameof(CustomerDto.City))" Title="City" />
+        <GridColumn Field="@(nameof(CustomerDto.Country))" Title="Country" />
+        <GridColumn Field="@(nameof(CustomerDto.Number))" Title="Number" />
+    </GridColumns>
+    <GridToolBarTemplate>
+        <div class="k-flex-auto k-gap-1">
+            <TelerikTextBox Class="k-flex-1" @bind-Value="@AIQuery" Placeholder="Press record to ask a question, or type your query."></TelerikTextBox>
+            <GridCommandButton Command="AI Assist" OnClick="@OnAIAssist" Icon="@SvgIcon.Sparkles">Ask AI</GridCommandButton>
+            <SpeechToTextButton OnRecongizededText="OnRecongnizedText" />
+        </div>
+    </GridToolBarTemplate>
+</TelerikGrid>
+
+@code {
+
+    #region Grid Setup and Data Initialization
+
+    // Reference the Grid instance
+    TelerikGrid<CustomerDto>? Grid { get; set; }
+    IEnumerable<CustomerDto> Customers = [];
+    IEnumerable<CustomerDto> SelectedItems { get; set; } = [];
+
+    protected override async Task OnInitializedAsync() {
+        Customers = await DataService.GetCustomers();
+        AI.Initialize();
+    }
+
+    #endregion
+
+    // The Natural Language prompt that will be provided to the AI
+    string AIQuery = "";
+    // set a flag to show that AI is working
+    bool isThinking;
+
+    async Task OnRecongnizedText(string text)
+    {
+        AIQuery = text;
+        await OnAIAssist();
+    }
+
+    async Task OnAIAssist()
+    {
+
+        // Show thinking indicator
+        isThinking = true;
+        StateHasChanged();
+
+        // Make AI Assist request
+        await ProcessAIRequest();
+
+        // Hide thinking indicator
+        isThinking = false;
+        StateHasChanged();
+
+        /// Processes the AI request using the provided query and the current grid state
+        async Task ProcessAIRequest()
+        {
+
+            // Get the grid state
+            var state = Grid!.GetState(); // Grid cannot be null here becuase the AI button is not accessible when the grid is not loaded
+
+            // If no Query is given, log the state for debugging
+            if (string.IsNullOrEmpty(AIQuery))
+            {
+                string stateJson = JsonSerializer.Serialize(state, new JsonSerializerOptions(JsonSerializerOptions.Web));
+                Logger.LogInformation(stateJson);
+            }
+
+            if (state is not null && !string.IsNullOrWhiteSpace(AIQuery))
+            {
+                GridState<CustomerDto>? response = await AI.ProcessGridRequest(AIQuery, state);
+                await TrySetState(response);
+            }
+        }
+
+        /// Tries to set the grid state to the provided state, or resets state if an exception occurs
+        Task TrySetState(GridState<CustomerDto>? newState)
+        {
+            try
+            {
+                // Apply new grid state
+                return Grid.SetStateAsync(newState);
+            }
+            catch (Exception)
+            {
+                // If something goes wrong, restore state by setting it to null
+                return Grid.SetStateAsync(null);
+            }
+        }
+
+    }
+}

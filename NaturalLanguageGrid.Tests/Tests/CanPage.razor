@@ -1,0 +1,31 @@
+﻿@inherits GridTestContext
+
+@code {
+    public CanPage(ITestOutputHelper output) : base(output) { }
+   
+    [Fact]
+    public async Task CanSetPage()
+    {
+        var cut = Render(@<TelerikGrid Data="TestHelpers.GetFakeCustomers()">
+        <GridColumns>
+            <GridColumn Field="CustomerId" Title="Customer Id" /> <!-- 0 -->
+            <GridColumn Field="CompanyName" Title="Company Name" /> <!-- 1 -->
+            <GridColumn Field="Address" Title="Address" /> <!-- 2 -->
+            <GridColumn Field="City" Title="City" /> <!-- 3 -->
+            <GridColumn Field="Country" Title="Country" /> <!-- 4 -->
+        </GridColumns>
+    </TelerikGrid>
+    );
+        var gridState = cut.FindGridInstance().GetState();
+        var service =  TestHelpers.CreateNaturalLanguageGridService(TestOutput);
+        string query = "SHow to page seven.";
+
+        // Act
+        var response = await service.ProcessGridRequest(query, gridState);
+
+        // Assert
+        // Currently the AI does not know how large the data set is, 
+        // so it can set page sizes above the actual pagable data set.
+        response?.Page.Should().Be(7);
+    }
+}

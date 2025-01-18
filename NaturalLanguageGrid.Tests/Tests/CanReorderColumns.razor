@@ -1,0 +1,58 @@
+﻿@inherits GridTestContext
+
+@code {
+    public CanReorderColumns(ITestOutputHelper output) : base(output) { }
+
+    [Fact]
+    public async Task CanReorderFirst()
+    {
+        var cut = Render(@<TelerikGrid Data="TestHelpers.GetFakeCustomers()">
+        <GridColumns>
+            <GridColumn Field="CustomerId" Title="Customer Id" /> <!-- 0 -->
+            <GridColumn Field="CompanyName" Title="Company Name" /> <!-- 1 -->
+            <GridColumn Field="Address" Title="Address" /> <!-- 2 -->
+            <GridColumn Field="City" Title="City" /> <!-- 3 -->
+            <GridColumn Field="Country" Title="Country" /> <!-- 4 -->
+        </GridColumns>
+    </TelerikGrid>
+    );
+        var gridState = cut.FindGridInstance().GetState();
+        var service =  TestHelpers.CreateNaturalLanguageGridService(TestOutput);
+
+		string query = "Move Address to the first column";
+        GridState<CustomerDto> response = await service.ProcessGridRequest(query, gridState) ?? throw new Exception("Service responded with null");
+
+        response.ColumnStates.ElementAt(0).Index.Should().Be(1);
+        response.ColumnStates.ElementAt(1).Index.Should().Be(2);
+        response.ColumnStates.ElementAt(2).Index.Should().Be(0);
+        response.ColumnStates.ElementAt(3).Index.Should().Be(3);
+        response.ColumnStates.ElementAt(4).Index.Should().Be(4);
+    }
+
+    [Fact]
+    public async Task CanReorderEnd()
+    {
+        var cut = Render(@<TelerikGrid Data="TestHelpers.GetFakeCustomers()">
+        <GridColumns>
+            <GridColumn Field="CustomerId" Title="Customer Id" /> <!-- 0 -->
+            <GridColumn Field="CompanyName" Title="Company Name" /> <!-- 1 -->
+            <GridColumn Field="Address" Title="Address" /> <!-- 2 -->
+            <GridColumn Field="City" Title="City" /> <!-- 3 -->
+            <GridColumn Field="Country" Title="Country" /> <!-- 4 -->
+        </GridColumns>
+    </TelerikGrid>
+    );
+        var gridState = cut.FindGridInstance().GetState();
+        var service =  TestHelpers.CreateNaturalLanguageGridService(TestOutput);
+
+        string query = "Move Company Name to the end";
+        GridState<CustomerDto> response = await service.ProcessGridRequest(query, gridState) ?? throw new Exception("Service responded with null");
+
+        response.ColumnStates.ElementAt(0).Index.Should().Be(0);
+        response.ColumnStates.ElementAt(1).Index.Should().Be(4);
+        response.ColumnStates.ElementAt(2).Index.Should().Be(1);
+        response.ColumnStates.ElementAt(3).Index.Should().Be(2);
+        response.ColumnStates.ElementAt(4).Index.Should().Be(3);
+    }
+
+}

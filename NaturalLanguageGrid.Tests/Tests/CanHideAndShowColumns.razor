@@ -1,0 +1,36 @@
+﻿@inherits GridTestContext
+
+@code {
+    public CanHideAndShowColumns(ITestOutputHelper output) : base(output) { }
+    
+    [Fact]
+    public async Task CanGetGridState()
+    {
+        var cut = Render(@<TelerikGrid Data="TestHelpers.GetFakeCustomers()">
+        <GridColumns>
+            <GridColumn Field="CustomerId" Title="Customer Id" /> <!-- 0 -->
+            <GridColumn Field="CompanyName" Title="Company Name" /> <!-- 1 -->
+            <GridColumn Field="Address" Title="Address" /> <!-- 2 -->
+            <GridColumn Field="City" Title="City" /> <!-- 3 -->
+            <GridColumn Field="Country" Title="Country" /> <!-- 4 -->
+        </GridColumns>
+    </TelerikGrid>
+    );
+        var gridState = cut.FindGridInstance().GetState();
+        var service = TestHelpers.CreateNaturalLanguageGridService(TestOutput);
+        string query = "Hide the city and address columns.";
+
+        // Act
+        var response = await service.ProcessGridRequest(query, gridState);
+
+        // Assert
+        var responseJson = JsonSerializer.Serialize(response!.ColumnStates, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        TestOutput.WriteLine(responseJson);
+        response.ColumnStates.ElementAt(0).Visible.Should().BeNull();  //Customer Id
+        response.ColumnStates.ElementAt(1).Visible.Should().BeNull();  // Company Name
+        response.ColumnStates.ElementAt(2).Visible.Should().BeFalse(); // Address
+        response.ColumnStates.ElementAt(3).Visible.Should().BeFalse(); // City
+        response.ColumnStates.ElementAt(4).Visible.Should().BeNull();  // Country
+
+    }
+}

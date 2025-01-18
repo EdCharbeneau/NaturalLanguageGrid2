@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>86dbd169-f338-45d7-9611-8e040f1cd69d</UserSecretsId>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
+		<PackageReference Include="Azure.Identity" Version="1.13.2" />
+		<PackageReference Include="Blazor.SpeechRecognition" Version="9.0.1" />
+		<PackageReference Include="FluentAssertions" Version="[7.0.0]" />
+		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.1.0-preview.1.25064.3" />
+		<PackageReference Include="Microsoft.Extensions.AI" Version="9.1.0-preview.1.25064.3" />
+		<PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.1.0-preview.1.25064.3" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.1" />
+		<PackageReference Include="Telerik.UI.for.Blazor" Version="7.0.0" />
+		<PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" Version="9.1.0" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AspireHost.ServiceDefaults\AspireHost.ServiceDefaults.csproj" />
+	  <ProjectReference Include="..\SampleData\SampleData.csproj" />
+	  <ProjectReference Include="..\TelerikAIExtensions\TelerikAIExtensions.csproj" />
+	</ItemGroup>
+</Project>

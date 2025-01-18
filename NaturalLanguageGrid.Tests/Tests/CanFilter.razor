@@ -1,0 +1,30 @@
+﻿@inherits GridTestContext
+@code {
+    public CanFilter(ITestOutputHelper output) : base(output) { }
+
+    [Fact]
+    public async Task CanFilterColumn()
+    {
+        var cut = Render(@<TelerikGrid Data="TestHelpers.GetFakeCustomers()">
+        <GridColumns>
+            <GridColumn Field="CustomerId" Title="Customer Id" /> <!-- 0 -->
+            <GridColumn Field="CompanyName" Title="Company Name" /> <!-- 1 -->
+            <GridColumn Field="Address" Title="Address" /> <!-- 2 -->
+            <GridColumn Field="City" Title="City" /> <!-- 3 -->
+            <GridColumn Field="Country" Title="Country" /> <!-- 4 -->
+        </GridColumns>
+    </TelerikGrid>
+    );
+        var gridState = cut.FindGridInstance().GetState();
+        var service =  TestHelpers.CreateNaturalLanguageGridService(TestOutput);
+        string query = "Filter City by the letters Sao.";
+
+        // Act
+        var response = await service.ProcessGridRequest(query, gridState);
+
+        // Assert
+        var responseJson = JsonSerializer.Serialize(response!.FilterDescriptors, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        responseJson.Should().Be("""[{"logicalOperator":0,"filterDescriptors":[{"member":"City","operator":6,"value":"Sao"}]}]""");
+
+    }
+}
