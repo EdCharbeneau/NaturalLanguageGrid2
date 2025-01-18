@@ -26,17 +26,16 @@ builder.Services.AddScoped<CustomerService>();
 }
 */
 
-//builder.Services.AddSingleton(
-//    new AzureOpenAIClient(
-//        new Uri(builder.Configuration["AI:AzureOpenAI:Endpoint"] ??
-//            throw new InvalidOperationException("The required AzureOpenAI endpoint was not configured for this application.")),
-//        new AzureKeyCredential(builder.Configuration["AI:AzureOpenAI:Key"] ??
-//            throw new InvalidOperationException("The required AzureOpenAI Key was not configured for this application."))
-//    ));
+builder.Services.AddSingleton(
+    new AzureOpenAIClient(
+        new Uri(builder.Configuration["AI:AzureOpenAI:Endpoint"] ??
+            throw new InvalidOperationException("The required AzureOpenAI endpoint was not configured for this application.")),
+        new AzureKeyCredential(builder.Configuration["AI:AzureOpenAI:Key"] ??
+            throw new InvalidOperationException("The required AzureOpenAI Key was not configured for this application."))
+    ));
 
-//builder.Services.AddChatClient(services => services.GetRequiredService<AzureOpenAIClient>()
-//	.AsChatClient(builder.Configuration["AI:AzureOpenAI:Chat:ModelId"] ?? "gpt-4o-mini"));
-builder.AddOllamaSharpChatClient("chat");
+builder.Services.AddChatClient(services => services.GetRequiredService<AzureOpenAIClient>()
+    .AsChatClient(builder.Configuration["AI:AzureOpenAI:Chat:ModelId"] ?? "gpt-4o-mini"));
 
 builder.Services.AddScoped<NaturalLanguageGridService>();
 builder.Services.AddSpeechRecognitionServices();

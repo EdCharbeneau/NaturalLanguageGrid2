@@ -80,11 +80,9 @@ public partial class NaturalLanguageGridService
 
 			ChatMessage UserMessage = CreateChatMessage(query, currentJsonState);
 
-			//var chatOptions = new ChatOptions() { ResponseFormat = ChatResponseFormat.ForJsonSchema(jsonSchema)};
-			var response = await _chatClient.CompleteAsync([AIRole, UserMessage]);
+			var response = await _chatClient.CompleteAsync<NaturalLanguageGridState<T>>([AIRole, UserMessage]);
 
-			//return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
-			return null;
+			return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
 		}
 	}
 
