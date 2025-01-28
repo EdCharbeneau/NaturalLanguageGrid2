@@ -10,7 +10,7 @@ public partial class NaturalLanguageGridService
 	private readonly IChatClient _chatClient;
 	private readonly ILogger<NaturalLanguageGridService> _logger;
 
-	private ChatMessage? AIRole { get; set; }
+	private ChatMessage? AIContext { get; set; }
 
 	public NaturalLanguageGridService(IChatClient chatClient, ILogger<NaturalLanguageGridService> logger)
 	{
@@ -21,12 +21,12 @@ public partial class NaturalLanguageGridService
 	public void Initialize()
 	{
         string systemPrompt = string.Format(gridPrompt, jsonSchema);
-		AIRole = new(ChatRole.System, systemPrompt);
+		AIContext = new(ChatRole.System, systemPrompt);
 	}
 
 	public async Task<GridState<T>?> ProcessGridRequest<T>(string query, GridState<T> state)
 	{
-		if (AIRole is null) throw new InvalidOperationException("The Initalize method must be called before proccessing requests");
+		if (AIContext is null) throw new InvalidOperationException("The Initalize method must be called before proccessing requests");
 
 		// Extract the column names from the current state
 		// The model understands them better if they are added to the prompt directly as an array
@@ -77,10 +77,11 @@ public partial class NaturalLanguageGridService
 		/// Attempts to process the user's request and returns the new grid state
 		async Task<GridState<T>?> TryProcessingGridState(string query, string currentJsonState)
 		{
+			ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormat.Json };
 
 			ChatMessage UserMessage = CreateChatMessage(query, currentJsonState);
 
-			var response = await _chatClient.CompleteAsync<NaturalLanguageGridState<T>>([AIRole, UserMessage]);
+			var response = await _chatClient.CompleteAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage], chatOptions);
 
 			return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
 		}

@@ -14,7 +14,6 @@ public partial class NaturalLanguageGridService
 		5. Hide and Show columns
 		6. Column Order | Ordering | Move
 
-
 		# Columns in the "columnStates" array
 
 		- Columns are found in the "columnStates" array.
@@ -92,7 +91,5 @@ public partial class NaturalLanguageGridService
 		- If a column is hidden, the "isVisible" value is set to `false`
 		- In all other states the "isVisible" value is `null`
 		- When hiding and showing columns, only change the "isVisible" value for the column names specified by the user, all other "isVisible" values should remain unchanged.
-
-		Return ONLY the JSON response in a web standard JSON format and DO NOT INCLUDE ANY OTHER TEXT.
 		""";
 }
