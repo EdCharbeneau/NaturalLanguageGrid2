@@ -5,7 +5,6 @@ public partial class NaturalLanguageGridService
 	// Setting up the AI's roles and responsibilities. This prompt is quite long, but gives the AI a pretty full understanding of the Grid through meta data.
 	private const string gridPrompt = """
 		# You are helping to edit a JSON object that represents a Data Grid User Interface component's meta data.
-		# This JSON object conforms to the following schema: {0}
 		# Users can request assistance with configuring:
 		1. Filtering
 		2. Sorting

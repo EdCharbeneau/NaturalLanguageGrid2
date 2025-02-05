@@ -20,7 +20,8 @@ public partial class NaturalLanguageGridService
 
 	public void Initialize()
 	{
-        string systemPrompt = string.Format(gridPrompt, jsonSchema);
+        //string systemPrompt = string.Format(gridPrompt, jsonSchema);
+		string systemPrompt = gridPrompt;
 		AIContext = new(ChatRole.System, systemPrompt);
 	}
 
@@ -77,13 +78,16 @@ public partial class NaturalLanguageGridService
 		/// Attempts to process the user's request and returns the new grid state
 		async Task<GridState<T>?> TryProcessingGridState(string query, string currentJsonState)
 		{
-			ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormat.Json };
+			ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormatJson.Json };
+			//ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormatJson.ForJsonSchema(JsonSerializer.SerializeToElement(jsonSchema)) };
 
 			ChatMessage UserMessage = CreateChatMessage(query, currentJsonState);
 
-			var response = await _chatClient.CompleteAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage], chatOptions);
+			var response = await _chatClient.CompleteAsync([AIContext, UserMessage], chatOptions);
+			//var response = await _chatClient.CompleteAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage], chatOptions);
 
-			return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
+			//return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
+			return null;
 		}
 	}
 
