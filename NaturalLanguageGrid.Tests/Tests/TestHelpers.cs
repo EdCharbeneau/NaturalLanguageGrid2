@@ -12,6 +12,7 @@ using SampleData;
 using TelerikAIExtensions.NaturalLanguage;
 
 namespace TelerikAIExtensions.Tests;
+
 public static class TestHelpers
 {
 	public static List<CustomerDto> GetFakeCustomers() => new List<CustomerDto>() {
@@ -35,12 +36,28 @@ public static class TestHelpers
 		return service;
 	}
 
-	private static IChatClient GetChatClient(IConfiguration config) => new AzureOpenAIClient(
-			new Uri(config["AI:AzureOpenAI:Endpoint"]!),
-			new AzureKeyCredential(config["AI:AzureOpenAI:Key"]!)
-		)
-		.AsChatClient(config["AI:AzureOpenAI:Chat:ModelId"] ?? "gpt-4o-mini");
+	private static IChatClient GetChatClient(IConfiguration config)
+	{
+		// 🌐 The Uri of your provider
+		var endpoint = config["Chat:AzureOpenAI:Endpoint"] ?? throw new InvalidOperationException("Missing configuration: Endpoint. See the README for details.");
+		// 🔑 The API Key for your provider
+		var apikey = config["Chat:AzureOpenAI:Key"] ?? throw new InvalidOperationException("Missing configuration: ApiKey. See the README for details.");
+		// 🧠 The model name or azure deployment name
+		var model = "gpt-o4-mini";
 
+		var innerClient = new AzureOpenAIClient(
+				new Uri(endpoint),
+				new AzureKeyCredential(apikey)
+			);
+
+		//var innerClient = new OpenAIClient(credential, openAIOptions);
+
+		IChatClient client = innerClient.GetChatClient(model).AsIChatClient();
+		return client;
+
+	}
 	public static TelerikGrid<CustomerDto> FindGridInstance(this IRenderedComponent<ContainerFragment> c) =>
 		c.FindComponent<TelerikGrid<CustomerDto>>().Instance;
+
+
 }

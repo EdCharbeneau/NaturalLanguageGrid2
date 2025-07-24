@@ -26,16 +26,26 @@ builder.Services.AddScoped<CustomerService>();
 }
 */
 
-builder.Services.AddSingleton(
-    new AzureOpenAIClient(
-        new Uri(builder.Configuration["AI:AzureOpenAI:Endpoint"] ??
-            throw new InvalidOperationException("The required AzureOpenAI endpoint was not configured for this application.")),
-        new AzureKeyCredential(builder.Configuration["AI:AzureOpenAI:Key"] ??
-            throw new InvalidOperationException("The required AzureOpenAI Key was not configured for this application."))
-    ));
+#region ChatClient
+// 🌐 The Uri of your provider
+var endpoint = builder.Configuration["Chat:AzureOpenAI:Endpoint"] ?? throw new InvalidOperationException("Missing configuration: Endpoint. See the README for details.");
+// 🔑 The API Key for your provider
+var apikey = builder.Configuration["Chat:AzureOpenAI:Key"] ?? throw new InvalidOperationException("Missing configuration: ApiKey. See the README for details.");
+// 🧠 The model name or azure deployment name
+var model = "gpt-o4-mini";
 
-builder.Services.AddChatClient(services => services.GetRequiredService<AzureOpenAIClient>()
-    .AsChatClient(builder.Configuration["AI:AzureOpenAI:Chat:ModelId"] ?? "gpt-4o-mini"));
+var innerClient = new AzureOpenAIClient(
+        new Uri(endpoint),
+        new AzureKeyCredential(apikey)
+    );
+
+//var innerClient = new OpenAIClient(credential, openAIOptions);
+
+IChatClient client = innerClient.GetChatClient(model).AsIChatClient();
+
+builder.Services.AddChatClient(client).UseFunctionInvocation().UseLogging();
+
+#endregion
 
 builder.Services.AddScoped<NaturalLanguageGridService>();
 builder.Services.AddSpeechRecognitionServices();
