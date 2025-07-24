@@ -77,11 +77,11 @@ public partial class NaturalLanguageGridService
 		/// Attempts to process the user's request and returns the new grid state
 		async Task<GridState<T>?> TryProcessingGridState(string query, string currentJsonState)
 		{
-			ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormat.Json };
+			// ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormat.Json };
 
 			ChatMessage UserMessage = CreateChatMessage(query, currentJsonState);
 
-			var response = await _chatClient.CompleteAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage], chatOptions);
+			var response = await _chatClient.GetResponseAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage]);
 
 			return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
 		}

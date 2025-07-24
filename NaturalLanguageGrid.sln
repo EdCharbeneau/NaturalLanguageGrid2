@@ -5,15 +5,11 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleData", "SampleData\SampleData.csproj", "{5C5AC971-0978-4183-9AA8-2D05EFC785B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireHost.ServiceDefaults", "AspireHost.ServiceDefaults\AspireHost.ServiceDefaults.csproj", "{63F2986E-5BD7-4316-AD6B-6B6C78F3248D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelerikAIExtensions", "TelerikAIExtensions\TelerikAIExtensions.csproj", "{7E9B0FBD-C40A-4B09-A254-23B7E8ABF8F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelerikAIExtensions.Tests", "NaturalLanguageGrid.Tests\TelerikAIExtensions.Tests.csproj", "{CBF4A86D-96D8-43E1-B15C-F5B616A0FCAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaturalLanguageGrid", "NaturalLanguageGrid\NaturalLanguageGrid.csproj", "{6C63B64F-C660-4AF6-861B-A95D35D591FA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireHost", "AspireHost\AspireHost.csproj", "{1A993B86-D379-47EE-A42A-2A4719B9657E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +21,6 @@ Global
 		{5C5AC971-0978-4183-9AA8-2D05EFC785B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C5AC971-0978-4183-9AA8-2D05EFC785B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C5AC971-0978-4183-9AA8-2D05EFC785B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63F2986E-5BD7-4316-AD6B-6B6C78F3248D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63F2986E-5BD7-4316-AD6B-6B6C78F3248D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63F2986E-5BD7-4316-AD6B-6B6C78F3248D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63F2986E-5BD7-4316-AD6B-6B6C78F3248D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7E9B0FBD-C40A-4B09-A254-23B7E8ABF8F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E9B0FBD-C40A-4B09-A254-23B7E8ABF8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E9B0FBD-C40A-4B09-A254-23B7E8ABF8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,10 +33,6 @@ Global
 		{6C63B64F-C660-4AF6-861B-A95D35D591FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C63B64F-C660-4AF6-861B-A95D35D591FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C63B64F-C660-4AF6-861B-A95D35D591FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A993B86-D379-47EE-A42A-2A4719B9657E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A993B86-D379-47EE-A42A-2A4719B9657E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A993B86-D379-47EE-A42A-2A4719B9657E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A993B86-D379-47EE-A42A-2A4719B9657E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

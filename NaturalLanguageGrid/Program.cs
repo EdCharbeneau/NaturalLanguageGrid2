@@ -6,7 +6,7 @@ using TelerikAIExtensions.NaturalLanguage;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
-builder.AddServiceDefaults();
+// builder.AddServiceDefaults();
 
 builder.Services.AddTelerikBlazor();
 
@@ -32,7 +32,7 @@ var endpoint = builder.Configuration["Chat:AzureOpenAI:Endpoint"] ?? throw new I
 // 🔑 The API Key for your provider
 var apikey = builder.Configuration["Chat:AzureOpenAI:Key"] ?? throw new InvalidOperationException("Missing configuration: ApiKey. See the README for details.");
 // 🧠 The model name or azure deployment name
-var model = "gpt-o4-mini";
+var model = "gpt-4o-mini";
 
 var innerClient = new AzureOpenAIClient(
         new Uri(endpoint),

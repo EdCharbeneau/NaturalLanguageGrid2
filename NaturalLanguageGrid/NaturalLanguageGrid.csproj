@@ -5,28 +5,27 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>86dbd169-f338-45d7-9611-8e040f1cd69d</UserSecretsId>
+		<UserSecretsId>$(UserSecretsId)</UserSecretsId>
 	</PropertyGroup>
 
 
 	<ItemGroup>
-		<PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
-		<PackageReference Include="Azure.Identity" Version="1.13.2" />
-		<PackageReference Include="Blazor.SpeechRecognition" Version="9.0.1" />
-		<PackageReference Include="FluentAssertions" Version="[7.0.0]" />
-		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.7.1" />
-		<PackageReference Include="Microsoft.Extensions.AI" Version="9.7.1" />
-		<PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.7.1-preview.1.25365.4" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.1" />
-		<PackageReference Include="Telerik.UI.for.Blazor" Version="9.2.0-master.20250724023918" />
-		<PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" Version="9.1.0" />
+		<PackageReference Include="Azure.AI.OpenAI" />
+		<PackageReference Include="Azure.Identity" />
+		<PackageReference Include="FluentAssertions" />
+		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" />
+		<PackageReference Include="Microsoft.Extensions.AI" />
+		<PackageReference Include="Microsoft.Extensions.AI.OpenAI" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+		<PackageReference Include="Microsoft.Extensions.Hosting"  />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console"  />
+		<PackageReference Include="Telerik.UI.for.Blazor" />
+		<PackageReference Include="Blazor.SpeechRecognition" />
+		<PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AspireHost.ServiceDefaults\AspireHost.ServiceDefaults.csproj" />
 	  <ProjectReference Include="..\SampleData\SampleData.csproj" />
 	  <ProjectReference Include="..\TelerikAIExtensions\TelerikAIExtensions.csproj" />
 	</ItemGroup>

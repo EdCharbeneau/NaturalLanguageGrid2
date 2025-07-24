@@ -43,7 +43,7 @@ public static class TestHelpers
 		// 🔑 The API Key for your provider
 		var apikey = config["Chat:AzureOpenAI:Key"] ?? throw new InvalidOperationException("Missing configuration: ApiKey. See the README for details.");
 		// 🧠 The model name or azure deployment name
-		var model = "gpt-o4-mini";
+		var model = "gpt-4o-mini";
 
 		var innerClient = new AzureOpenAIClient(
 				new Uri(endpoint),

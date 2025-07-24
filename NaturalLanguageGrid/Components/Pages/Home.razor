@@ -12,20 +12,13 @@
 Visible="@(isThinking)"
 Text="Thinking...">
     <Template>
-        <TelerikLoader Type="@LoaderType.Pulsing"
-        Size="@(ThemeConstants.Loader.Size.Large)" />
+        <TelerikLoader Type="@LoaderType.Pulsing" Size="@(ThemeConstants.Loader.Size.Large)" />
     </Template>
 </TelerikLoaderContainer>
 
-<TelerikGrid Data="@Customers" Height="500px" @ref="@Grid"
-Groupable="true"
-Pageable="true"
-Sortable="true"
-FilterMode="@GridFilterMode.FilterRow"
-Reorderable="true"
-Resizable="true"
-SelectionMode="GridSelectionMode.Multiple"
-@bind-SelectedItems="@SelectedItems">
+<TelerikGrid Data="@Customers" Height="500px" @ref="@Grid" Groupable="true" Pageable="true" Sortable="true"
+    FilterMode="@GridFilterMode.FilterRow" Reorderable="true" Resizable="true"
+    SelectionMode="GridSelectionMode.Multiple" @bind-SelectedItems="@SelectedItems">
     <GridColumns>
         <GridColumn Field="@(nameof(CustomerDto.CustomerId))" Editable="false" />
         <GridColumn Field="@(nameof(CustomerDto.CompanyName))" Title="Company Name" />
@@ -34,15 +27,14 @@ SelectionMode="GridSelectionMode.Multiple"
         <GridColumn Field="@(nameof(CustomerDto.Country))" Title="Country" />
         <GridColumn Field="@(nameof(CustomerDto.Number))" Title="Number" />
     </GridColumns>
-    <GridToolBarTemplate>
-        <div class="k-flex-auto k-gap-1">
-            <TelerikTextBox Class="k-flex-1" @bind-Value="@AIQuery" Placeholder="Press record to ask a question, or type your query."></TelerikTextBox>
-            <GridCommandButton Command="AI Assist" OnClick="@OnAIAssist" Icon="@SvgIcon.Sparkles">Ask AI</GridCommandButton>
-            <SpeechToTextButton OnRecongizededText="OnRecongnizedText" />
-        </div>
-    </GridToolBarTemplate>
-</TelerikGrid>
 
+</TelerikGrid>
+<div class="k-d-flex k-flex-auto k-gap-1">
+        <TelerikTextBox Class="k-flex-1" @bind-Value="@AIQuery"
+            Placeholder="Press record to ask a question, or type your query."></TelerikTextBox>
+        <TelerikButton OnClick="@OnAIAssist" Icon="@SvgIcon.Sparkles">Ask AI</TelerikButton>
+        <SpeechToTextButton OnRecongizededText="OnRecongnizedText" />
+    </div>
 @code {
 
     #region Grid Setup and Data Initialization
@@ -52,7 +44,8 @@ SelectionMode="GridSelectionMode.Multiple"
     IEnumerable<CustomerDto> Customers = [];
     IEnumerable<CustomerDto> SelectedItems { get; set; } = [];
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         Customers = await DataService.GetCustomers();
         AI.Initialize();
     }
@@ -91,8 +84,8 @@ SelectionMode="GridSelectionMode.Multiple"
             // Get the grid state
             var state = Grid!.GetState(); // Grid cannot be null here becuase the AI button is not accessible when the grid is not loaded
 
-            // If no Query is given, log the state for debugging
-            if (string.IsNullOrEmpty(AIQuery))
+// If no Query is given, log the state for debugging
+if (string.IsNullOrEmpty(AIQuery))
             {
                 string stateJson = JsonSerializer.Serialize(state, new JsonSerializerOptions(JsonSerializerOptions.Web));
                 Logger.LogInformation(stateJson);
