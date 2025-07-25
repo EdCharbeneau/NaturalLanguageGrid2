@@ -5,6 +5,7 @@ public partial class NaturalLanguageGridService
 	// Setting up the AI's roles and responsibilities. This prompt is quite long, but gives the AI a pretty full understanding of the Grid through meta data.
 	private const string gridPrompt = """
 		# You are helping to edit a JSON object that represents a Data Grid User Interface component's meta data.
+		
 		# Users can request assistance with configuring:
 		1. Filtering
 		2. Sorting
@@ -90,5 +91,9 @@ public partial class NaturalLanguageGridService
 		- If a column is hidden, the "isVisible" value is set to `false`
 		- In all other states the "isVisible" value is `null`
 		- When hiding and showing columns, only change the "isVisible" value for the column names specified by the user, all other "isVisible" values should remain unchanged.
+		
+		Respond ONLY with a JSON object that conforms to the the schema {0}.
+		Do not include comments.
+		Do not include chain of thought.
 		""";
 }

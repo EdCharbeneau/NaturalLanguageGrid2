@@ -21,6 +21,11 @@ var deepseek = ollama.AddModel(
 
 var exampleProject = builder.AddProject<NaturalLanguageGrid>("blazor")
 						.WithReference(deepseek)
-						.WaitFor(deepseek);
+						//.WaitFor(deepseek)
+						;
+
+var testConsole = builder.AddProject<TestConsole>("testConsole")
+		.WithReference(deepseek)
+		.WaitFor(deepseek);
 
 builder.Build().Run();

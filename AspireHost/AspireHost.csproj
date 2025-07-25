@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NaturalLanguageGrid\NaturalLanguageGrid.csproj" />
+    <ProjectReference Include="..\TestConsole\TestConsole.csproj" />
   </ItemGroup>
 
 </Project>

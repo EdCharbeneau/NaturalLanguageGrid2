@@ -20,8 +20,7 @@ public partial class NaturalLanguageGridService
 
 	public void Initialize()
 	{
-        //string systemPrompt = string.Format(gridPrompt, jsonSchema);
-		string systemPrompt = gridPrompt;
+		string systemPrompt = string.Format(gridPrompt, jsonSchema);
 		AIContext = new(ChatRole.System, systemPrompt);
 	}
 
@@ -38,7 +37,7 @@ public partial class NaturalLanguageGridService
 
 		// Serialize to JSON for prompting
 		string currentJsonState = JsonSerializer.Serialize(state, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-		
+
 		_logger.LogInformation($"Current State: {currentJsonState}");
 
 		return await TryProcessingGridState(query, currentJsonState);
@@ -50,6 +49,7 @@ public partial class NaturalLanguageGridService
 			**User Request**: Update the given the Current GridState with my request. {query}
 			**Current GridState as JSON**: {currentJsonState}
 			**Current Column Order from left to right**: "ColumnOrdering":{currentState.ColumnOrdering}
+			# Respond only in a valid JSON object, do not include comments.
 			""");
 
 		/// Remaps the columns in the new state to match the original state's ordering
@@ -78,8 +78,13 @@ public partial class NaturalLanguageGridService
 		/// Attempts to process the user's request and returns the new grid state
 		async Task<GridState<T>?> TryProcessingGridState(string query, string currentJsonState)
 		{
-			ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormatJson.Json };
-			//ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormatJson.ForJsonSchema(JsonSerializer.SerializeToElement(jsonSchema)) };
+			ChatOptions chatOptions = new()
+			{ ResponseFormat = ChatResponseFormat.Json,
+				AdditionalProperties = new AdditionalPropertiesDictionary()
+				{
+					{ "type", "json_object" },
+				}
+			};
 
 			ChatMessage UserMessage = CreateChatMessage(query, currentJsonState);
 
@@ -87,7 +92,11 @@ public partial class NaturalLanguageGridService
 			//var response = await _chatClient.CompleteAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage], chatOptions);
 
 			//return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
-			return null;
+			NaturalLanguageGridState<T>? newState  = JsonSerializer.Deserialize<NaturalLanguageGridState<T>>(response.Message.Text, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+
+
+			return RemapColumns(newState);
 		}
 	}
 
