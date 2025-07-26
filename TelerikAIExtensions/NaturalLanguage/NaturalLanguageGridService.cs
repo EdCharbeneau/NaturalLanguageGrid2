@@ -26,7 +26,7 @@ public partial class NaturalLanguageGridService
 
 	public async Task<GridState<T>?> ProcessGridRequest<T>(string query, GridState<T> state)
 	{
-		if (AIContext is null) throw new InvalidOperationException("The Initalize method must be called before proccessing requests");
+		if (AIContext is null) throw new InvalidOperationException("The Initialize method must be called before processing requests");
 
 		// Extract the column names from the current state
 		// The model understands them better if they are added to the prompt directly as an array
@@ -36,7 +36,7 @@ public partial class NaturalLanguageGridService
 		NaturalLanguageGridState<T> currentState = new(state, new ColumnOrdering(columns));
 
 		// Serialize to JSON for prompting
-		string currentJsonState = JsonSerializer.Serialize(state, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+		string currentJsonState = JsonSerializer.Serialize(currentState, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 		
 		_logger.LogInformation($"Current State: {currentJsonState}");
 
@@ -77,11 +77,11 @@ public partial class NaturalLanguageGridService
 		/// Attempts to process the user's request and returns the new grid state
 		async Task<GridState<T>?> TryProcessingGridState(string query, string currentJsonState)
 		{
-			// ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormat.Json };
+			ChatOptions chatOptions = new() { ResponseFormat = ChatResponseFormat.Json };
 
 			ChatMessage UserMessage = CreateChatMessage(query, currentJsonState);
 
-			var response = await _chatClient.GetResponseAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage]);
+			var response = await _chatClient.GetResponseAsync<NaturalLanguageGridState<T>>([AIContext, UserMessage], chatOptions, false);
 
 			return response.TryGetResult(out var newState) ? RemapColumns(newState) : null;
 		}
@@ -102,6 +102,5 @@ public partial class NaturalLanguageGridService
 	/// </summary>
 	/// <param name="Columns"></param>
 	public record ColumnOrdering(string[] Columns);
-
 
 }

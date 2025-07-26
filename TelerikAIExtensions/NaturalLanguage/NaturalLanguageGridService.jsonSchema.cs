@@ -7,6 +7,9 @@ public partial class NaturalLanguageGridService
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
+"gridState": {
+"type": "object",
+"properties": {
       "GroupDescriptors": {
         "type": "array",
         "items": {
@@ -40,10 +43,6 @@ public partial class NaturalLanguageGridService
           "required": ["Index", "Width", "Visible", "Locked", "Id", "Field"],
           "additionalProperties": false
 		}
-      },
-      "ColumnOrdering": {
-        "type": "array",
-        "items": { "type": "string" }
       },
       "ExpandedItems": {
         "type": "array",
@@ -116,6 +115,19 @@ public partial class NaturalLanguageGridService
     },
     "required": ["GroupDescriptors", "CollapsedGroups", "ColumnStates", "ExpandedItems", "FilterDescriptors", "SortDescriptors", "Page", "Skip", "SelectedItems", "OriginalEditItem", "EditItem", "EditField", "InsertedItem", "TableWidth"],
     "additionalProperties": false
+  },
+  "columnOrdering": {
+    "type": "object",
+    "properties": {
+      "columns": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["columns"]
+  }
+},
+"required": ["gridState", "columnOrdering"]
   }
 """;
 

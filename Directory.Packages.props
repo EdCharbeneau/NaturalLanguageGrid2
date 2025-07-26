@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <MicrosoftExtensionsAIVersion>9.5.0</MicrosoftExtensionsAIVersion>
+    <MicrosoftExtensionsAIVersion>9.7.1</MicrosoftExtensionsAIVersion>
     <!-- By having a common user secrets ID, it's possible to set your LLM service endpoint/key just once and use them for the whole workshop -->
     <UserSecretsId>86dbd169-f338-45d7-9611-8e040f1cd69d</UserSecretsId>
   </PropertyGroup>
@@ -11,7 +11,7 @@
     <PackageVersion Include="Microsoft.Extensions.AI" Version="$(MicrosoftExtensionsAIVersion)" />
     <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="$(MicrosoftExtensionsAIVersion)" />
     <PackageVersion Include="Microsoft.Extensions.AI.Ollama" Version="$(MicrosoftExtensionsAIVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="9.5.0-preview.1.25262.9cls" />
+    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="9.7.1-preview.1.25365.4" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.1" />
 	<PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.7" />
 	<PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
